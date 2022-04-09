@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "slippery",
+  "version": "${version}",
+
+  "name": "Slip & Slide",
+  "description": "You slip and like also slide too I guess",
+  "authors": [
+    "Froyo/MeowMC",
+    "Cosmic"
+  ],
+  "contact": {
+  },
+
+  "license": "MIT",
+  "icon": "assets/slippery/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "tk.meowmc.slippery.Slippery"
+    ],
+    "client": [
+      "tk.meowmc.slippery.client.SlipperyClient"
+    ],
+    "modmenu": [
+      "tk.meowmc.slippery.config.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "slippery.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.13.3",
+    "fabric": "*",
+    "minecraft": "1.18.x",
+    "java": ">=17"
+  }
+}
