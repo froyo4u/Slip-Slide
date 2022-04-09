@@ -7,6 +7,8 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import tk.meowmc.slippery.Slippery;
 
+import static me.shedaniel.autoconfig.AutoConfig.getConfigHolder;
+
 @Config(name = Slippery.MODID)
 public class SlipperyConfig implements ConfigData {
     @ConfigEntry.Gui.TransitiveObject
@@ -19,10 +21,15 @@ public class SlipperyConfig implements ConfigData {
     }
 
     public static SlipperyConfig get() {
-        return AutoConfig.getConfigHolder(SlipperyConfig.class).getConfig();
+        SlipperyConfig config = getConfigHolder(SlipperyConfig.class).getConfig();
+        if (config.slideValue > 3)
+            config.slideValue = 3;
+        if (config.slideValue < 0.1f)
+            config.slideValue = 0.1f;
+        return config;
     }
 
     public static void save() {
-        AutoConfig.getConfigHolder(SlipperyConfig.class).save();
+        getConfigHolder(SlipperyConfig.class).save();
     }
 }

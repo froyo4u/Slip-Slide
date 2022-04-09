@@ -1,17 +1,10 @@
 package tk.meowmc.slippery.mixin;
 
-import com.mojang.authlib.GameProfile;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.input.Input;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.Flutterer;
-import net.minecraft.entity.MovementType;
+import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.sound.SoundEvent;
@@ -19,71 +12,69 @@ import net.minecraft.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import org.spongepowered.asm.mixin.Final;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import tk.meowmc.slippery.config.SlipperyConfig;
 
 
-@Mixin(ClientPlayerEntity.class)
-public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity {
-    @Shadow
-    public int ticksSinceSprintingChanged;
-    @Shadow
-    public Input input;
-    @Shadow
-    @Final
-    public ClientPlayNetworkHandler networkHandler;
-    @Shadow
-    protected int ticksLeftToDoubleTapSprint;
-    @Shadow
-    @Final
-    protected MinecraftClient client;
-    @Shadow
-    private boolean inSneakingPose;
-    @Shadow
-    private int ticksToNextAutojump;
-    @Shadow
-    private boolean falling;
-    @Shadow
-    private int underwaterVisibilityTicks;
-    @Shadow
-    private int field_3938;
-    @Shadow
-    private float mountJumpStrength;
+@Mixin(LivingEntity.class)
+public abstract class LivingEntityMixin extends Entity {
 
-    public ClientPlayerEntityMixin(ClientWorld world, GameProfile profile) {
-        super(world, profile);
-    }
-
-    @Shadow
-    protected abstract void updateNausea();
-
-    @Shadow
-    protected abstract boolean isWalking();
-
-    @Shadow
-    public abstract boolean shouldSlowDown();
-
-    @Shadow
-    protected abstract boolean isCamera();
-
-    @Shadow
-    public abstract boolean hasJumpingMount();
-
-    @Shadow
-    public abstract float getMountJumpStrength();
-
-    @Shadow
-    protected abstract void startRidingJump();
-
-    @Shadow
-    protected abstract void pushOutOfBlocks(double x, double z);
 
     SlipperyConfig config = SlipperyConfig.get();
 
-    @Override
-    public void travel(Vec3d movementInput) {
+    public LivingEntityMixin(EntityType<?> type, World world) {
+        super(type, world);
+    }
+
+    @Shadow
+    public abstract boolean canMoveVoluntarily();
+
+    @Shadow
+    public abstract boolean hasStatusEffect(StatusEffect effect);
+
+    @Shadow
+    protected abstract boolean shouldSwimInFluids();
+
+    @Shadow
+    public abstract boolean canWalkOnFluid(FluidState fluidState);
+
+    @Shadow
+    protected abstract float getBaseMovementSpeedMultiplier();
+
+    @Shadow
+    public abstract float getMovementSpeed();
+
+    @Shadow
+    public abstract boolean isClimbing();
+
+    @Shadow
+    public abstract Vec3d method_26317(double d, boolean bl, Vec3d vec3d);
+
+    @Shadow
+    public abstract boolean isFallFlying();
+
+    @Shadow
+    public abstract Vec3d applyMovementInput(Vec3d movementInput, float slipperiness);
+
+    @Shadow
+    @Nullable
+    public abstract StatusEffectInstance getStatusEffect(StatusEffect effect);
+
+    @Shadow
+    public abstract boolean hasNoDrag();
+
+    @Shadow
+    public abstract void updateLimbs(LivingEntity entity, boolean flutter);
+
+    @Shadow
+    public abstract LivingEntity.FallSounds getFallSounds();
+
+
+    /*public void travel(Vec3d movementInput) {
         double g;
         double d = this.getX();
         double e = this.getY();
@@ -111,9 +102,14 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
             myTravel(movementInput);
         }
         this.increaseTravelMotionStats(this.getX() - d, this.getY() - e, this.getZ() - f);
-    }
+    }*/
 
-    public void myTravel(Vec3d movementInput) {
+    /**
+     * @author me
+     * @reason cuz
+     */
+    @Overwrite
+    public void travel(Vec3d movementInput) {
         if (this.canMoveVoluntarily() || this.isLogicalSideForUpdatingMovement()) {
             boolean bl;
             double d = 0.08;
@@ -127,7 +123,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
                 double e = this.getY();
                 float f = this.isSprinting() ? 0.9f : this.getBaseMovementSpeedMultiplier();
                 float g = 0.02f;
-                float h = EnchantmentHelper.getDepthStrider(this);
+                float h = EnchantmentHelper.getDepthStrider((LivingEntity) (Object) this);
                 if (h > 3.0f) {
                     h = 3.0f;
                 }
@@ -210,10 +206,6 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
             } else {
                 BlockPos blockPos = this.getVelocityAffectingPos();
                 float p = config.slideValue;
-                if (p > 1.75f)
-                    p = 1.75f;
-                if (p < 0.1f)
-                    p = 0.1f;
                 float f = this.onGround ? p * 0.91f : 0.91f;
                 Vec3d vec3d6 = this.applyMovementInput(movementInput, p);
                 double q = vec3d6.y;
@@ -236,7 +228,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
                 }
             }
         }
-        this.updateLimbs(this, this instanceof Flutterer);
+        this.updateLimbs((LivingEntity) (Object) this, this instanceof Flutterer);
     }
 
     private SoundEvent getFallSound(int distance) {

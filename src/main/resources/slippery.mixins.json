@@ -3,8 +3,8 @@
   "minVersion": "0.8",
   "package": "tk.meowmc.slippery.mixin",
   "compatibilityLevel": "JAVA_17",
-  "client": [
-    "ClientPlayerEntityMixin"
+  "mixins": [
+    "LivingEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
