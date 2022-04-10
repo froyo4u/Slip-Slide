@@ -20,9 +20,6 @@
     "main": [
       "tk.meowmc.slippery.Slippery"
     ],
-    "client": [
-      "tk.meowmc.slippery.client.SlipperyClient"
-    ],
     "modmenu": [
       "tk.meowmc.slippery.config.ModMenuIntegration"
     ]

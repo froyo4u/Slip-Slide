@@ -14,19 +14,14 @@ public class SlipperyConfig implements ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     @ConfigEntry.Category("Sliding")
     @ConfigEntry.Gui.Tooltip
-    public float slideValue = 0.6f;
+    public float slideValue = 0f;
 
     public static void register() {
         AutoConfig.register(SlipperyConfig.class, GsonConfigSerializer::new);
     }
 
     public static SlipperyConfig get() {
-        SlipperyConfig config = getConfigHolder(SlipperyConfig.class).getConfig();
-        if (config.slideValue > 3)
-            config.slideValue = 3;
-        if (config.slideValue < 0.1f)
-            config.slideValue = 0.1f;
-        return config;
+        return getConfigHolder(SlipperyConfig.class).getConfig();
     }
 
     public static void save() {

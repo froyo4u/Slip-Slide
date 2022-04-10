@@ -1,5 +1,5 @@
 {
   "text.autoconfig.slippery.title": "Slip & Slide Options",
   "text.autoconfig.slippery.option.slideValue": "Slipperiness",
-  "text.autoconfig.slippery.option.slideValue.@Tooltip": "§bIce/Packed Ice:§f 0.98\n§9Blue Ice:§f 0.989\n§cExtreme:§f 1.08\n§cExtreme§6+§c:§f 0.59 and below\n§4§lExtreme§6§l++§4:§f 1.09+\n\n§lEXTREME VALUES MAY CAUSE LAG AND/OR CRASHES"
+  "text.autoconfig.slippery.option.slideValue.@Tooltip": "§bIce/Packed Ice:§f 0.38\n§9Blue Ice:§f 0.389\n§cExtreme:§f 0.48\n§cExtreme§6+§c:§f -0.01 and below\n§4§lExtreme§6§l++§4:§f .49+\n\n§lEXTREME VALUES MAY CAUSE LAG AND/OR CRASHES"
 }

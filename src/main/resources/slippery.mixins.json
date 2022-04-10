@@ -4,7 +4,7 @@
   "package": "tk.meowmc.slippery.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "LivingEntityMixin"
+    "BlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1

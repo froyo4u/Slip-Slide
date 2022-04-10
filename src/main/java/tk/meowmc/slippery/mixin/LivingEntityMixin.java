@@ -73,37 +73,6 @@ public abstract class LivingEntityMixin extends Entity {
     @Shadow
     public abstract LivingEntity.FallSounds getFallSounds();
 
-
-    /*public void travel(Vec3d movementInput) {
-        double g;
-        double d = this.getX();
-        double e = this.getY();
-        double f = this.getZ();
-        if (this.isSwimming() && !this.hasVehicle()) {
-            double h;
-            g = this.getRotationVector().y;
-            double d2 = h = g < -0.2 ? 0.085 : 0.06;
-            if (g <= 0.0 || this.jumping || !this.world.getBlockState(new BlockPos(this.getX(), this.getY() + 1.0 - 0.1, this.getZ())).getFluidState().isEmpty()) {
-                Vec3d vec3d = this.getVelocity();
-                this.setVelocity(vec3d.add(0.0, (g - vec3d.y) * h, 0.0));
-            }
-        }
-        if (this.getAbilities().flying && !this.hasVehicle()) {
-            g = this.getVelocity().y;
-            float i = this.airStrafingSpeed;
-            this.airStrafingSpeed = this.getAbilities().getFlySpeed() * (float) (this.isSprinting() ? 2 : 1);
-            myTravel(movementInput);
-            Vec3d vec3d2 = this.getVelocity();
-            this.setVelocity(vec3d2.x, g * 0.6, vec3d2.z);
-            this.airStrafingSpeed = i;
-            this.onLanding();
-            this.setFlag(Entity.FALL_FLYING_FLAG_INDEX, false);
-        } else {
-            myTravel(movementInput);
-        }
-        this.increaseTravelMotionStats(this.getX() - d, this.getY() - e, this.getZ() - f);
-    }*/
-
     /**
      * @author me
      * @reason cuz
